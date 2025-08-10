@@ -26,12 +26,37 @@ const projects = {
   }
 };
 
+// Scroll Animation Observer
+function initScrollAnimations() {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in');
+        // Once animated, we can stop observing
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all elements with animate-on-scroll class
+  const animatedElements = document.querySelectorAll('.animate-on-scroll');
+  animatedElements.forEach(el => observer.observe(el));
+}
+
 // Modal functionality
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('project-modal');
   const modalOverlay = modal.querySelector('.modal-overlay');
   const modalClose = modal.querySelector('.modal-close');
   const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+  // Initialize scroll animations
+  initScrollAnimations();
 
   // Open modal
   portfolioItems.forEach(item => {
